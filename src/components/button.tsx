@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
-import { colors } from "../styles";
+import { theme } from "../styles";
 
 
 interface ButtonProps extends TouchableOpacityProps {
@@ -13,12 +13,14 @@ export function Button(props: ButtonProps ){
 
 const styles = StyleSheet.create({
 	button: {
-		backgroundColor: colors.primary,
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		borderRadius: 100,
+		backgroundColor: theme.colors.primary,
+		paddingVertical: theme.spacing * 4,
+		borderRadius: theme.radius,
+		width: "100%",
+		display: "flex",
+		alignItems:"center"
 	},
 	text:{
-		color: colors["primary-foreground"] 
+		color: theme.colors["primary-foreground"] 
 	}
 })
