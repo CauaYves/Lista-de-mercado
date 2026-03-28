@@ -6,9 +6,9 @@ export const theme = {
 		"primary-foreground": "#ececec",
 		muted: "#828282",
 		"muted-foreground": "#ececec",
-		border:"#E4E6EC",
+		border: "#E4E6EC",
 		input: "#FFFFFF",
 	},
 	spacing: 4,
-	radius: 4 * 6
-}
+	radius: 4 * 6,
+};
