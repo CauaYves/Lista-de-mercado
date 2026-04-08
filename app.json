@@ -4,10 +4,9 @@
 		"slug": "ListaMercado",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"icon": "@/assets/images/icon.png",
+		"icon": "@/assets/images/logo.png",
 		"scheme": "listamercado",
 		"userInterfaceStyle": "automatic",
-		"newArchEnabled": true,
 		"ios": {
 			"supportsTablet": true
 		},
@@ -15,7 +14,6 @@
 			"adaptiveIcon": {
 				"backgroundColor": "#E6F4FE"
 			},
-			"edgeToEdgeEnabled": true,
 			"predictiveBackGestureEnabled": false
 		},
 		"web": {

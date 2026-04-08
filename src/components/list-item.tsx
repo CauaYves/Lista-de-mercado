@@ -1,23 +1,27 @@
 import { Trash2 } from "lucide-react-native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import type { ItemStatus } from "../app/constants/status";
+import type { MarketItems } from "../storage/market-items";
 import { theme } from "../styles";
 import { StatusIcon } from "./status-icon";
 
 interface ListItemProps {
-	isActive: boolean;
-	status: ItemStatus;
-	description: string;
+	data: MarketItems[number];
+	onDelete: (id: string) => Promise<void>;
 }
 
-export function ListItem({ description, isActive, status }: ListItemProps) {
+export function ListItem({ data, onDelete }: ListItemProps) {
 	return (
 		<View style={styles.view}>
 			<TouchableOpacity>
-				<StatusIcon isActive={isActive} status={status} />
+				<StatusIcon isActive={true} status={data.status} />
 			</TouchableOpacity>
-			<Text>{description}</Text>
-			<TouchableOpacity style={styles.trash}>
+			<Text style={styles.text}>{data.name}</Text>
+			<TouchableOpacity
+				style={styles.trash}
+				onPress={() => {
+					onDelete(data.id);
+				}}
+			>
 				<Trash2 size={16} color={theme.colors.muted} />
 			</TouchableOpacity>
 		</View>
@@ -29,9 +33,16 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		width: "100%",
-		gap: 4,
+		gap: theme.spacing * 4,
 	},
 	trash: {
 		marginLeft: "auto",
+		alignItems: "center",
+		justifyContent: "center",
+		height: theme.spacing * 12,
+		width: theme.spacing * 12,
+	},
+	text: {
+		fontWeight: "600",
 	},
 });

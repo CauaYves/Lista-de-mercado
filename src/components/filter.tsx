@@ -4,29 +4,44 @@ import {
 	TouchableOpacity,
 	type TouchableOpacityProps,
 } from "react-native";
-import type { ItemStatus } from "../app/constants/status";
+import type { MarketItems } from "../storage/market-items";
 import { theme } from "../styles";
 import { StatusIcon } from "./status-icon";
 
 interface FilterProps extends TouchableOpacityProps {
-	status: ItemStatus;
-	isActive: boolean;
+	status: MarketItems[number]["status"];
 	title: string;
+	setFilter: React.Dispatch<
+		React.SetStateAction<MarketItems[number]["status"]>
+	>;
+	filter: MarketItems[number]["status"];
 }
-export function Filter({ title, status, isActive, ...props }: FilterProps) {
+export function Filter({
+	filter,
+	title,
+	status,
+	setFilter,
+	...props
+}: FilterProps) {
+	const isActive = filter === status;
 	const styles = StyleSheet.create({
 		TouchableOpacity: {
 			flexDirection: "row",
 			alignItems: "center",
-			gap: 4,
+			gap: theme.spacing * 2,
 		},
 		text: {
 			color: isActive ? theme.colors.foreground : theme.colors.muted,
+			fontWeight: "600",
 		},
 	});
 
 	return (
-		<TouchableOpacity {...props} style={styles.TouchableOpacity}>
+		<TouchableOpacity
+			{...props}
+			style={styles.TouchableOpacity}
+			onPress={() => setFilter(status)}
+		>
 			<StatusIcon isActive={isActive} status={status} />
 			<Text style={styles.text}>{title}</Text>
 		</TouchableOpacity>

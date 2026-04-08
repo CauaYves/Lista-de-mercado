@@ -2,11 +2,55 @@ import { Button } from "@/src/components/button";
 import { Filter } from "@/src/components/filter";
 import { Input } from "@/src/components/input";
 import { ListItem } from "@/src/components/list-item";
+import {
+	type MarketItems,
+	storageMarketItems,
+} from "@/src/storage/market-items";
 import { theme } from "@/src/styles";
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import { ItemStatus } from "../constants/status";
+import { useCallback, useEffect, useState } from "react";
+import {
+	Alert,
+	FlatList,
+	Image,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
 
 export default function Index() {
+	const [filter, setFilter] =
+		useState<MarketItems[number]["status"]>("PENDING");
+	const [stageItem, setStageItem] = useState("");
+	const [items, setItems] = useState<MarketItems>([]);
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	const getItems = async () => {
+		const items = await storageMarketItems.getByStatus(filter);
+		setItems(items);
+	};
+
+	const addItem = useCallback(() => {
+		storageMarketItems.add({
+			name: stageItem,
+			status: "PENDING",
+		});
+		getItems();
+		setFilter("PENDING");
+		Alert.alert("Adicionado", `Item adicionado ${stageItem}`);
+		setStageItem("");
+		// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	}, [stageItem, getItems]);
+
+	const removeItem = async (id: string) => {
+		const items = await storageMarketItems.removeById(id);
+		setItems(items);
+	};
+
+	useEffect(() => {
+		getItems();
+		// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	}, [getItems]);
+
 	return (
 		<View
 			style={{
@@ -26,16 +70,23 @@ export default function Index() {
 				}}
 			>
 				<Image source={require("@/src/assets/images/logo.png")} />
-				<Input placeholder="O que você precisa comprar?"></Input>
-				<Button title="Adicionar" />
+				<Input
+					placeholder="O que você precisa comprar?"
+					onChangeText={(e) => setStageItem(e)}
+					value={stageItem}
+				/>
+				<Button
+					disabled={stageItem.trim().length === 0}
+					title="Adicionar"
+					onPress={addItem}
+				/>
 			</View>
 			<View
 				style={{
 					width: "100%",
 					height: "75%",
 					padding: theme.spacing * 6,
-					gap: 20,
-					marginTop: 50,
+					gap: theme.spacing * 5,
 					borderRadius: theme.spacing * 6,
 					backgroundColor: "#FFFF",
 					overflow: "hidden",
@@ -45,37 +96,52 @@ export default function Index() {
 					style={{
 						width: "100%",
 						flexDirection: "row",
-						gap: 16,
+						gap: theme.spacing * 4,
 						borderBottomWidth: 1,
 						borderColor: theme.colors.border,
-						paddingBottom: 16,
+						paddingBottom: theme.spacing * 4,
 					}}
 				>
 					<Filter
-						status={ItemStatus.PENDING}
-						isActive={true}
+						status={"PENDING"}
 						title={"Pendentes"}
+						setFilter={setFilter}
+						filter={filter}
 					/>
 					<Filter
-						status={ItemStatus.DONE}
-						isActive={false}
+						status={"DONE"}
 						title={"Comprados"}
+						setFilter={setFilter}
+						filter={filter}
 					/>
 					<TouchableOpacity style={{ marginLeft: "auto" }}>
 						<Text style={{ color: theme.colors.muted }}>Limpar</Text>
 					</TouchableOpacity>
 				</View>
-				<View
-					style={{
-						width: "100%",
-					}}
-				>
-					<ListItem
-						isActive={false}
-						status={ItemStatus.DONE}
-						description={"3 Tomates"}
-					></ListItem>
-				</View>
+
+				<FlatList
+					data={items}
+					keyExtractor={(item) => item.id}
+					showsVerticalScrollIndicator={false}
+					contentContainerStyle={{ gap: theme.spacing * 2 }}
+					ItemSeparatorComponent={() => (
+						<View
+							style={{
+								borderBottomWidth: 1,
+								borderColor: theme.colors.border,
+								paddingVertical: theme.spacing * 1,
+							}}
+						/>
+					)}
+					renderItem={({ item }) => (
+						<ListItem data={item} onDelete={removeItem} />
+					)}
+					ListEmptyComponent={() => (
+						<Text style={{ color: theme.colors.muted, textAlign: "center" }}>
+							😴 Não há itens
+						</Text>
+					)}
+				/>
 			</View>
 		</View>
 	);

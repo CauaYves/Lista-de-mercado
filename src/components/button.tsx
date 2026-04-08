@@ -9,10 +9,16 @@ import { theme } from "../styles";
 interface ButtonProps extends TouchableOpacityProps {
 	title: string;
 }
-export function Button(props: ButtonProps) {
+
+export function Button({ title, disabled, ...rest }: ButtonProps) {
 	return (
-		<TouchableOpacity {...props} style={styles.button} activeOpacity={0.8}>
-			<Text style={styles.text}>{props.title}</Text>
+		<TouchableOpacity
+			{...rest}
+			disabled={disabled}
+			activeOpacity={0.8}
+			style={[styles.button, disabled && styles.buttonDisabled]}
+		>
+			<Text style={styles.text}>{title}</Text>
 		</TouchableOpacity>
 	);
 }
@@ -23,8 +29,10 @@ const styles = StyleSheet.create({
 		paddingVertical: theme.spacing * 4,
 		borderRadius: theme.radius,
 		width: "100%",
-		display: "flex",
 		alignItems: "center",
+	},
+	buttonDisabled: {
+		backgroundColor: `${theme.colors.primary}50`,
 	},
 	text: {
 		color: theme.colors["primary-foreground"],
