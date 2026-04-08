@@ -37,13 +37,12 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		width: "100%",
-		gap: theme.spacing * 4,
 	},
 	status: {
 		alignItems: "center",
 		justifyContent: "center",
 		height: theme.spacing * 12,
-		width: theme.spacing * 12,
+		paddingRight: 10,
 	},
 	trash: {
 		marginLeft: "auto",
