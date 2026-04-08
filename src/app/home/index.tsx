@@ -46,6 +46,11 @@ export default function Index() {
 		setItems(items);
 	};
 
+	const toggleStatus = async (id: string) => {
+		await storageMarketItems.toggleStatus(id);
+		getItems();
+	};
+
 	const removeAll = async () => {
 		await storageMarketItems.removeAll();
 		getItems();
@@ -119,7 +124,14 @@ export default function Index() {
 						setFilter={setFilter}
 						filter={filter}
 					/>
-					<TouchableOpacity style={{ marginLeft: "auto" }} onPress={removeAll}>
+					<TouchableOpacity
+						style={{
+							marginLeft: "auto",
+							height: theme.spacing * 8,
+							justifyContent: "center",
+						}}
+						onPress={removeAll}
+					>
 						<Text style={{ color: theme.colors.muted }}>Limpar</Text>
 					</TouchableOpacity>
 				</View>
@@ -139,7 +151,11 @@ export default function Index() {
 						/>
 					)}
 					renderItem={({ item }) => (
-						<ListItem data={item} onDelete={removeItem} />
+						<ListItem
+							data={item}
+							onDelete={removeItem}
+							onToggleStatus={toggleStatus}
+						/>
 					)}
 					ListEmptyComponent={() => (
 						<Text style={{ color: theme.colors.muted, textAlign: "center" }}>

@@ -29,6 +29,7 @@ export function Filter({
 			flexDirection: "row",
 			alignItems: "center",
 			gap: theme.spacing * 2,
+			height: theme.spacing * 8,
 		},
 		text: {
 			color: isActive ? theme.colors.foreground : theme.colors.muted,

@@ -7,12 +7,16 @@ import { StatusIcon } from "./status-icon";
 interface ListItemProps {
 	data: MarketItems[number];
 	onDelete: (id: string) => Promise<void>;
+	onToggleStatus: (id: string) => Promise<void>;
 }
 
-export function ListItem({ data, onDelete }: ListItemProps) {
+export function ListItem({ data, onDelete, onToggleStatus }: ListItemProps) {
 	return (
 		<View style={styles.view}>
-			<TouchableOpacity>
+			<TouchableOpacity
+				onPress={() => onToggleStatus(data.id)}
+				style={styles.status}
+			>
 				<StatusIcon isActive={true} status={data.status} />
 			</TouchableOpacity>
 			<Text style={styles.text}>{data.name}</Text>
@@ -34,6 +38,12 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		width: "100%",
 		gap: theme.spacing * 4,
+	},
+	status: {
+		alignItems: "center",
+		justifyContent: "center",
+		height: theme.spacing * 12,
+		width: theme.spacing * 12,
 	},
 	trash: {
 		marginLeft: "auto",

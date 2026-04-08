@@ -64,10 +64,27 @@ async function removeAll() {
 	await AsyncStorage.clear();
 }
 
+async function toggleStatus(id: string) {
+	const items = await get();
+
+	const updatedItems = items.map((item) => {
+		if (item.id === id) {
+			const updatedStatus: MarketItems[number]["status"] =
+				item.status === "DONE" ? "PENDING" : "DONE";
+
+			return { ...item, status: updatedStatus };
+		}
+		return item;
+	});
+
+	save(updatedItems);
+}
+
 export const storageMarketItems = {
 	get,
 	add,
 	getByStatus,
 	removeById,
 	removeAll,
+	toggleStatus,
 };
