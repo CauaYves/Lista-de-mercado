@@ -60,9 +60,14 @@ async function removeById(id: string) {
 	return filteredItems;
 }
 
+async function removeAll() {
+	await AsyncStorage.clear();
+}
+
 export const storageMarketItems = {
 	get,
 	add,
 	getByStatus,
 	removeById,
+	removeAll,
 };

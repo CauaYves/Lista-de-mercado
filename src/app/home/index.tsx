@@ -46,6 +46,11 @@ export default function Index() {
 		setItems(items);
 	};
 
+	const removeAll = async () => {
+		await storageMarketItems.removeAll();
+		getItems();
+	};
+
 	useEffect(() => {
 		getItems();
 		// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -114,7 +119,7 @@ export default function Index() {
 						setFilter={setFilter}
 						filter={filter}
 					/>
-					<TouchableOpacity style={{ marginLeft: "auto" }}>
+					<TouchableOpacity style={{ marginLeft: "auto" }} onPress={removeAll}>
 						<Text style={{ color: theme.colors.muted }}>Limpar</Text>
 					</TouchableOpacity>
 				</View>
